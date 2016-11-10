@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -67,10 +69,15 @@ public class OkHttpUtils {
      * @param jsonBean    解析json数据的Bean
      */
     public void getString(final WebResponse mResponse, String url, final int requestCode, final Class jsonBean) {
+        //添加缓存,没网时直接读取缓存
+        final CacheControl.Builder builder = new CacheControl.Builder();
+        builder.maxAge(10, TimeUnit.MILLISECONDS);//指示客户机可以接收生存期不大于指定时间的响应。
+        CacheControl cache = builder.build();
+
         OkHttpClient mOkHttpClient = new OkHttpClient();
         FormBody formBody = new FormBody.Builder()
                 .build();
-        Request request = new Request.Builder().url(url).post(formBody).build();
+        Request request = new Request.Builder().cacheControl(cache).url(url).post(formBody).build();
         mOkHttpClient.newCall(request).enqueue(new Callback() {
 
             @Override
@@ -106,6 +113,11 @@ public class OkHttpUtils {
      * @param map         带参数请求网络的参数 Map<String,String>
      */
     public void getStringWithParam(final WebResponse mResponse, String url, final int requestCode, final Class jsonBean, Map<String, String> map) {
+        //添加缓存,没网时直接读取缓存
+        final CacheControl.Builder cachebuilder = new CacheControl.Builder();
+        cachebuilder.maxAge(10, TimeUnit.MILLISECONDS);//指示客户机可以接收生存期不大于指定时间的响应。
+        CacheControl cache = cachebuilder.build();
+
         OkHttpClient mOkHttpClient = new OkHttpClient();
         FormBody.Builder builder = new FormBody.Builder();
         Iterator i = map.keySet().iterator();
@@ -114,7 +126,7 @@ public class OkHttpUtils {
             builder.add(key, map.get(key));
         }
         FormBody formBody = builder.build();
-        Request request = new Request.Builder().url(url).post(formBody).build();
+        Request request = new Request.Builder().cacheControl(cache).url(url).post(formBody).build();
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements WebResponse, Uplo
 
     private TextView textView;
     private Button btn1;
-    private static final String webUrl = "http://192.168.4.113/Test/servlet/JsonTest";
+    private static final String webUrl = "http://192.168.2.182/Test/servlet/JsonTest";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity implements WebResponse, Uplo
             @Override
             public void onClick(View view) {
                 //不带参数请求网络
-//               OkHttpUtils.getInstance().getString(MainActivity.this, webUrl, 1, TestBean.class);
+//                OkHttpUtils.getInstance().getString(MainActivity.this, webUrl, 1, TestBean.class);
                 //带参数请求网络，传入Map<String,String>
-//                OkHttpUtils.getInstance().getStringWithParam(MainActivity.this, webUrl, 1, TestBean.class, map);
+                OkHttpUtils.getInstance().getStringWithParam(MainActivity.this, webUrl, 1, TestBean.class, map);
                 //文件上传
               /*  String url = "http://192.168.4.113/Test/servlet/FormServlet";
                 Map<String, String> fileMap = new HashMap<String, String>();
@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements WebResponse, Uplo
                 fileMap.put("test.txt", Environment.getExternalStorageDirectory().getAbsolutePath());
                 OkHttpUtils.getInstance().fileUpload(MainActivity.this, url, fileMap, map);*/
                 //文件下载
-                String url = "http://192.168.4.109/Test/1.png";
-                OkHttpUtils.getInstance().fileDownload(MainActivity.this, url, Environment.getExternalStorageDirectory().getAbsolutePath(), "1.png");
+//                String url = "http://192.168.4.109/Test/1.png";
+//                OkHttpUtils.getInstance().fileDownload(MainActivity.this, url, Environment.getExternalStorageDirectory().getAbsolutePath(), "1.png");
             }
         });
     }
@@ -71,8 +71,10 @@ public class MainActivity extends AppCompatActivity implements WebResponse, Uplo
     public void onSuccessResponse(Call call, RBResponse resultBean, int requestCode) throws IOException {
         /**转化为目标Bean*/
         TestBean bean = (TestBean) resultBean;
-        Log.i("TAG", bean.getData().size() + "");
-        textView.setText("成功");
+
+        String str = bean.getData().get(1).getCarId();
+        Log.i("TAG", bean.getData().size() + "     " + str);
+        textView.setText(str);
     }
 
     @Override
