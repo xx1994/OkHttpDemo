@@ -1,12 +1,12 @@
  OkHttpDemo
-对OkHttp进行简单的封装，基本实现简单的网络post请求，进行Gson处理，直接返回Bean。文件上传支持多文件和参数一起提交，还有文件下载，都支持进度在UI线程返回
+对OkHttp进行简单的封装，基本实现简单的网络post请求并带缓存，进行Gson处理，直接返回Bean。文件上传支持多文件和参数一起提交，还有文件下载，都支持进度在UI线程返回
 
 使用方法:
 添加 gson okhttp okio 三个jar包
 
 网络psot请求
 
-   //不带参数请求网络
+   //不带参数请求网络（带缓存）
 	 
          OkHttpUtils.getInstance().getString(MainActivity.this, webUrl, 1, TestBean.class);
 				 
@@ -15,7 +15,7 @@
        TestBean.class Gson解析调用的Bean文件   继承RBResponse类即可。
        增加int型requestCode，便于在回调是分辨不同请求。
 			 
-   //带参数请求网络，传入Map<String,String>
+   //带参数请求网络，传入Map<String,String>（带缓存）
 	 
          OkHttpUtils.getInstance().getStringWithParam(MainActivity.this, webUrl, 1, TestBean.class, map);
 				 
